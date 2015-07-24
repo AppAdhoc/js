@@ -1,0 +1,38 @@
+<html lang="zh_CN">
+
+<head>
+  <title>Adhoc AbTestDemo</title>
+
+  <!-- Include Adhoc javascript library -->
+  <script src='http://localhost/adhoc.js'></script>
+</head>
+
+<!-- Please substitude ADHOC_50000000000000ad80c23462 with your AdhocAppKey -->
+<body onload="adhoc.init('ADHOC_50000000000000ad80c23462')">
+
+  <!-- Use experiment flags to implement A/B versions -->
+  <div id="flags"></div>
+  <script>
+    function applyFlags(flags) { 
+      var text = JSON.stringify(flags);
+      if (flags.hasOwnProperty('testFlag') && flags.testFlag) {
+        text = text + " 用户看到测试中的B版本";
+      } else {
+        text = text + " 用户看到标准A版本";
+      }
+      document.getElementById('flags').innerHTML = text;
+    }
+  </script>
+
+  <!-- Get experiment flags -->
+  <p>
+    <button href="" onclick="adhoc.getExperimentFlags(applyFlags)">测试获得模块开关</button>
+  </p>
+
+  <!-- Report stats -->
+  <p>
+    <button href="" onclick="adhoc.incrementStat('clicks', 1)">统计点击次数</button>
+  </p>
+</body>
+
+</html>

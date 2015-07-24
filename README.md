@@ -12,3 +12,6 @@ http://AppAdhoc.com
 *	Documentation
 http://AppAdhoc.com/optimizer/docs/sdk/h5.html
 
+* Demo App
+demo/index.html
+
