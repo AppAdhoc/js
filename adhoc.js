@@ -49,7 +49,7 @@
 		for(var i = 0; i < ca.length; i++) {
 			var c = ca[i];
 			while(c.charAt(0) == ' ') c = c.substring(1);
-			if(c.startsWith(cname)) return c.substring(name.length, c.length);
+			if(c.indexOf(cname) === 0) return c.substring(name.length, c.length);
 		}
 		return null;
 	};
@@ -152,7 +152,7 @@
 		thisAdhoc.ak = appKey;  // ak as appKey
 
 		// If App specifies client id, use it. Otherwise, use cookie for id.
-		var cookieClientId = String(getCookie('ADHOC_MEMBERSHIP_CLIENT_ID'));
+		var cookieClientId = getCookie('ADHOC_MEMBERSHIP_CLIENT_ID');
 		if (cookieClientId == null) {
 			cookieClientId = thisAdhoc.generateClientId();
 			setCookie('ADHOC_MEMBERSHIP_CLIENT_ID', cookieClientId, 365);
