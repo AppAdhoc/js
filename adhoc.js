@@ -114,7 +114,7 @@
 	};
 
 	var getBrowserInfo = function() {
-		var ua = navigator.userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || []; 
+		var ua = window.navigator.userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || []; 
 		if(/trident/i.test(M[1])) {
 			tem = /\brv[ :]+(\d+)/g.exec(ua) || []; 
 			return {
@@ -131,7 +131,7 @@
 				};
 			}
 		}
-		M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+		M = M[2] ? [M[1], M[2]] : [window.navigator.appName, window.navigator.appVersion, '-?'];
 		if((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1,1,tem[1]);
 		return {
 			n: M[0],  // n as name
@@ -176,7 +176,13 @@
 			app_key: thisAdhoc.ak,
 			summary: {
 				OS: b.n,
-				OS_version: b.v
+				OS_version: b.v,
+				url: window.location.href,
+				referrer: document.referrer,
+				language: window.navigator.language,
+				device_os_name: window.navigator.platform,
+				height: window.innerHeight,
+				width: window.innerWidth
 			},
 			custom: {}
 		};
@@ -197,7 +203,13 @@
 			timestamp: Date.now() / 1000,
 			summary: {
 				OS: b.n,
-				OS_version: b.v
+				OS_version: b.v,
+				url: window.location.href,
+				referrer: document.referrer,
+				language: window.navigator.language,
+				device_os_name: window.navigator.platform,
+				height: window.innerHeight,
+				width: window.innerWidth
 			},
 			stat_key: stat,
 			stat_value: value
