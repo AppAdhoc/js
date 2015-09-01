@@ -12,7 +12,8 @@
 	var protocol = window.location.protocol === "https:" ? "https:" : "http:";
 	var ADHOC_GETFLAGS_URL = protocol + '//experiment.appadhoc.com/get_flags';
 	var ADHOC_FORCEEXP_URL = protocol + '//api.appadhoc.com/optimizer/api/forceexp.php';
-	var ADHOC_TRACKING_URL = protocol + '//tracking.appadhoc.com:23462';
+	var ADHOC_TRACKING_PORT = protocol === 'https:' ? '23463' : '23462';
+	var ADHOC_TRACKING_URL = protocol + '//tracking.appadhoc.com:' + ADHOC_TRACKING_PORT;
 
 	// Canonicalize Date.now().
 	Date.now = Date.now || function() {
@@ -114,9 +115,9 @@
 	};
 
 	var getBrowserInfo = function() {
-		var ua = window.navigator.userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || []; 
+		var ua = window.navigator.userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
 		if(/trident/i.test(M[1])) {
-			tem = /\brv[ :]+(\d+)/g.exec(ua) || []; 
+			tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
 			return {
 				n: 'IE',
 				v: (tem[1] || '')
@@ -140,6 +141,8 @@
 	};
 
 	var thisAdhoc = adhoc;
+
+    thisAdhoc.customs = {};
 
 	thisAdhoc.generateClientId = function() {
 		function s4() {
@@ -184,7 +187,7 @@
 				height: window.innerHeight,
 				width: window.innerWidth
 			},
-			custom: {}
+			custom: thisAdhoc.customs
 		};
 		// Note for a new client, we may not have client_id yet, so we query the server to get one.
 		if(thisAdhoc.c != null) {
@@ -200,7 +203,7 @@
 			adhoc_app_track_id: thisAdhoc.ak,
 			client_id: thisAdhoc.c,
 			event_type: 'REPORT_STAT',
-			timestamp: Date.now() / 1000,
+			timestamp: Math.round(Date.now() / 1000),
 			summary: {
 				OS: b.n,
 				OS_version: b.v,
@@ -213,7 +216,7 @@
 			},
 			stat_key: stat,
 			stat_value: value
-		}; 
+		};
 
 		AJAX(ADHOC_TRACKING_URL, data, null);
 	};
@@ -227,5 +230,8 @@
 		AJAX(ADHOC_FORCEEXP_URL, data, null);
 	};
 
-}((window.adhoc = typeof Object.create !== 'undefined' ? Object.create(null) : {}), document, window));
+    thisAdhoc.setProperties = function(opts){
+	   thisAdhoc.customs = opts;
+    };
 
+}((window.adhoc = typeof Object.create !== 'undefined' ? Object.create(null) : {}), document, window));
